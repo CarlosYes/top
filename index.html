@@ -86,8 +86,8 @@ function setWidgetData_1214347548(data){
   } 
 } 
 
-// Função que força a hora e a data exatas do PC do ouvinte no widget original
-function applyListenerLocalTime() {
+// Função que substitui a hora do servidor booked.net pela hora exata do dispositivo do ouvinte a cada segundo
+function forceExactListenerTime() {
   var timeElem = document.querySelector('#tw_7_1214347548 .bw-cl-126el-t');
   var dateElem = document.querySelector('#tw_7_1214347548 .bw-cl-d');
   
@@ -96,7 +96,6 @@ function applyListenerLocalTime() {
     var hours = String(now.getHours()).padStart(2, '0');
     var minutes = String(now.getMinutes()).padStart(2, '0');
     
-    // Atualiza a hora mantendo o efeito original dos dois pontos
     timeElem.innerHTML = hours + '<span class="bw-cl-colon">:</span>' + minutes;
     
     if (dateElem) {
@@ -120,8 +119,8 @@ timeBookedScript.setAttribute("type", "text/javascript");
 timeBookedScript.src = widgetSrc; 
 document.body.appendChild(timeBookedScript); 
 
-// Sincroniza a hora do PC assim que o widget original carregar
-setInterval(applyListenerLocalTime, 1000);
+// Mantém o bloqueio ativo a cada segundo para que o widget original nunca consiga reverter para a hora de Lisboa
+setInterval(forceExactListenerTime, 1000);
 </script>
 <!-- clock widget end -->
 
