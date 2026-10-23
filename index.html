@@ -72,9 +72,8 @@
 function setWidgetData_1214347548(data){ 
   if(typeof(data) != 'undefined' && data.results.length > 0) { 
     for(var i = 0; i < data.results.length; ++i) { 
-      var objMainBlock = ''; 
       var params = data.results[i]; 
-      objMainBlock = document.getElementById('tw_'+params.widget_type+'_'+params.widget_id); 
+      var objMainBlock = document.getElementById('tw_'+params.widget_type+'_'+params.widget_id); 
       if(objMainBlock !== null) {
         objMainBlock.innerHTML = params.html_code;
         var locationAnchor = objMainBlock.querySelector('a');
@@ -86,6 +85,28 @@ function setWidgetData_1214347548(data){
     } 
   } 
 } 
+
+// Função que força a hora e a data exatas do PC do ouvinte no widget original
+function applyListenerLocalTime() {
+  var timeElem = document.querySelector('#tw_7_1214347548 .bw-cl-126el-t');
+  var dateElem = document.querySelector('#tw_7_1214347548 .bw-cl-d');
+  
+  if (timeElem) {
+    var now = new Date();
+    var hours = String(now.getHours()).padStart(2, '0');
+    var minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    // Atualiza a hora mantendo o efeito original dos dois pontos
+    timeElem.innerHTML = hours + '<span class="bw-cl-colon">:</span>' + minutes;
+    
+    if (dateElem) {
+      var months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      dateElem.innerHTML = months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+      dateElem.style.color = '#ffff00';
+    }
+  }
+}
+
 var clock_timer_1214347548 = -1; 
 var widgetSrc = "https://widgets.booked.net/time/info?ver=2;domid=;type=7;id=1214347548;scode=70241;city_id=19253;wlangid=8;mode=0;details=0;background=ffffff;border_color=ffffff;color=08488d;add_background=ffffff;add_color=00faff;head_color=ffff00;border=0;transparent=0"; 
 var widgetUrl = location.href; 
@@ -98,6 +119,9 @@ var timeBookedScript = document.createElement("script");
 timeBookedScript.setAttribute("type", "text/javascript"); 
 timeBookedScript.src = widgetSrc; 
 document.body.appendChild(timeBookedScript); 
+
+// Sincroniza a hora do PC assim que o widget original carregar
+setInterval(applyListenerLocalTime, 1000);
 </script>
 <!-- clock widget end -->
 
@@ -211,7 +235,7 @@ document.body.appendChild(timeBookedScript);
     }
 </script>
 
-<!-- Texto em 2 linhas movido 60px para a direita (left: 90px) -->
+<!-- Texto em 2 linhas -->
 <div id="text">
   <div class="rainbow-text">
     Não Se Esqueça<br>De Mudar A Hora
